@@ -3,17 +3,24 @@ import { Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 const styles = StyleSheet.create({
     button: {
+        paddingLeft: 30,
         paddingTop: 10,
         borderBottomColor: "grey",
         borderBottomWidth: StyleSheet.hairlineWidth,
         height: 100
     },
     button2: {
+        paddingLeft: 30,
         paddingTop: 10,
         borderBottomColor: "grey",
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderTopColor: "grey",
         borderTopWidth: StyleSheet.hairlineWidth,
+        height: 100
+    },
+    button3: {
+        paddingLeft: 30,
+        paddingTop: 10,
         height: 100
     },
     title: {
@@ -22,7 +29,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         position: "relative",
         left: 165,
-        bottom: 60
+        bottom: 60,
+        
     },
     image: {
         width: 75,
@@ -34,12 +42,22 @@ const styles = StyleSheet.create({
     description: {
         position: "relative",
         left: 158,
-        bottom: 55
+        bottom: 55,
+        
     }
 })
 
 export default function Button(props) {
-    if (props.topBorder) {
+    if (props.noBorder) {
+        return (
+            <TouchableOpacity style={[styles.button3, props.style]} onPress={props.onPress}>
+                <Image source={props.image} style={styles.image} />
+                <Text style={[styles.title, props.styleTitle]}>{props.title}</Text>
+                <Text style={[styles.description, props.styleDescription]}>{props.children}</Text>
+            </TouchableOpacity>
+        );
+    }
+    else if (props.topBorder) {
         return (
             <TouchableOpacity style={[styles.button2, props.style]} onPress={props.onPress}>
                 <Image source={props.image} style={styles.image} />
