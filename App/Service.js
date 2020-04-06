@@ -56,13 +56,15 @@ const styles = StyleSheet.create({
     },
     refreshButton: {
         position: "relative",
-        top: 100,
+        bottom: 55,
+        left: 210,
         width: 57,
         textAlign: "center"
     },
     arrowButton: {
         position: "relative",
-        top: 120,
+        bottom: 100,
+        left: 290,
         width: 57,
         textAlign: "center"
     },
@@ -74,34 +76,48 @@ class Service extends Component {
     constructor(props){
         super(props);
         this.state = {status: ""};
-        
+        this.title = this.props.title;
     }
 
     componentDidMount() {
-        const socket = io("http://raspserver:3000");
+        this.socket = io("http://raspserver:3000");
         
-        socket.emit("get", this.props.title);
         
-        socket.on("get", msg => {
+        this.socket.emit("get", this.props.title);
+        
+        this.socket.on("get", msg => {
             msgs = msg.split(":");
             this.setState({status: msgs[0], console: msgs[1]})
             ToastAndroid.show("Data received", ToastAndroid.SHORT);
         })
     }
 
+    refresh() {
+        this.socket.emit("get", this.props.title);
+    }
+
+    turnOff() {
+        this.socket.emit("off", this.props.title);
+    }
+
+
     render() {
         const { navigation } = this.props;
         if (this.state.status == "ON") {
             return(
-                <View style={styles.container}>
+                <View>
                     <Nav />
-                    <ServiceButton title={this.props.title} image={this.props.image} noBorder={true}>{this.props.description}</ServiceButton>
-                    <Text style={styles.service}>Service: <Text style={styles.on}>ON</Text></Text>
-                    <Text style={styles.logTitle}>Console:</Text>
-                    <Text style={styles.console}>{this.state.console}</Text>
-                    <Button style={styles.turnOnButton}><Icon name="power-off" color="#ffffff" size={20} /></Button>
-                    <Button style={styles.refreshButton}><Icon name="refresh" color="#ffffff" size={20} /></Button>
-                    <Button style={styles.arrowButton}><Icon name="arrow-left" color="#ffffff" size={20} /></Button>
+                    <Button onPress={() => this.refresh()} style={styles.refreshButton}><Icon name="refresh" color="#ffffff" size={20} /></Button>
+                    <Button onPress={() => navigation.navigate("Home")} style={styles.arrowButton}><Icon name="arrow-left" color="#ffffff" size={20} /></Button>
+                    <View style={{position: "relative", bottom: 90}}>
+                        <ServiceButton title={this.props.title} image={this.props.image} noBorder={true}>{this.props.description}</ServiceButton>
+                        <View style={styles.container}>
+                            <Text style={styles.service}>Service: <Text style={styles.on}>ON</Text></Text>
+                            <Text style={styles.logTitle}>Console:</Text>
+                            <Text style={styles.console}>{this.state.console}</Text>
+                            <Button onPress={() => this.turnOff()} style={styles.turnOnButton}><Icon name="power-off" color="#ffffff" size={20} /></Button>
+                        </View>
+                    </View>
                 </View>
             );
         }
@@ -110,14 +126,18 @@ class Service extends Component {
             return(
                 <View>
                     <Nav />
-                    <ServiceButton title={this.props.title} image={this.props.image} noBorder={true}>{this.props.description}</ServiceButton>
-                    <View style={styles.container}>
-                        <Text style={styles.service}>Service: <Text style={styles.off}>OFF</Text></Text>
-                        <Text style={styles.logTitle}>Console:</Text>
-                        <Text style={styles.console}>{this.state.console}</Text>
-                        <Button style={styles.turnOnButton}><Icon name="power-off" color="#ffffff" size={20} /></Button>
-                        <Button style={styles.refreshButton}><Icon name="refresh" color="#ffffff" size={20} /></Button>
-                        <Button onPress={() => {navigation.navigate("Home");}} style={styles.arrowButton}><Icon name="arrow-left" color="#ffffff" size={20} /></Button>
+                    <Button onPress={() => this.refresh()} style={styles.refreshButton}><Icon name="refresh" color="#ffffff" size={20} /></Button>
+                    <Button onPress={() => {navigation.navigate("Home");}} style={styles.arrowButton}><Icon name="arrow-left" color="#ffffff" size={20} /></Button>
+                    <View style={{position: "relative", bottom: 90}}>
+                        <ServiceButton title={this.props.title} image={this.props.image} noBorder={true}>{this.props.description}</ServiceButton>
+                        <View style={styles.container}>
+                            <Text style={styles.service}>Service: <Text style={styles.off}>OFF</Text></Text>
+                            <Text style={styles.logTitle}>Console:</Text>
+                            <Text style={styles.console}>{this.state.console}</Text>
+                            <Button style={styles.turnOnButton}><Icon name="power-off" color="#ffffff" size={20} /></Button>
+                            <Button style={styles.refreshButton}><Icon name="refresh" color="#ffffff" size={20} /></Button>
+                            <Button onPress={() => {navigation.navigate("Home");}} style={styles.arrowButton}><Icon name="arrow-left" color="#ffffff" size={20} /></Button>
+                        </View>
                     </View>
                 </View>
             );
