@@ -8,7 +8,6 @@ const port = 3000;
 
 let gabbotService;
 let gabbotStatus;
-let gabbotId = "";
 
 function execute(command, callback) {
 	exec(command, function(error, stdout, stderr) {callback(stdout);});
@@ -33,18 +32,31 @@ io.on("connection", socket => {
 		if (msg == "Gabbot") {
 			execute("ps aux | grep gabbot.js", function (stdout) {
 				let temp = stdout.split(" ");
-				exec("kill " + temp[7], function(error, stdout, stderr) {
-					if (error) throw error;
-					else if (stderr) console.log(stderr);
-					else console.log(stdout);
+				let temp2 = 0;
+
+				let BreakException = {};
+
+				try {
+					temp.forEach(element => {
+						let numbers = /^[0-9]+$/;
+						if (element.match(numbers)) {
+							temp2 = parseInt(element);
+							throw BreakException;
+						}
+					});
+				}
+
+				catch (e) {
+					if (e !== BreakException) throw e; 
+				}
+				
+				exec("kill " + temp2, function(error, stdout, stderr) {
+					console.log(stdout);
+				});
+				exec("kill " + ++temp2, function(error, stdout, stderr) {
+					console.log(stdout);
 				});
 			});
-			console.log(gabbotId);
-			/*exec("kill " + gabbotId, function(error, stdout, stderr) {
-				if (error) throw error;
-				else if (stderr) console.log(stderr);
-				else console.log(stdout);
-			});*/
 		}
 	});
 });
