@@ -100,6 +100,10 @@ class Service extends Component {
         this.socket.emit("off", this.props.title);
     }
 
+    turnOn() {
+        this.socket.emit("on", this.props.title);
+    }
+
 
     render() {
         const { navigation } = this.props;
@@ -134,9 +138,7 @@ class Service extends Component {
                             <Text style={styles.service}>Service: <Text style={styles.off}>OFF</Text></Text>
                             <Text style={styles.logTitle}>Console:</Text>
                             <Text style={styles.console}>{this.state.console}</Text>
-                            <Button style={styles.turnOnButton}><Icon name="power-off" color="#ffffff" size={20} /></Button>
-                            <Button style={styles.refreshButton}><Icon name="refresh" color="#ffffff" size={20} /></Button>
-                            <Button onPress={() => {navigation.navigate("Home");}} style={styles.arrowButton}><Icon name="arrow-left" color="#ffffff" size={20} /></Button>
+                            <Button onPress={() => this.turnOn()} style={styles.turnOnButton}><Icon name="power-off" color="#ffffff" size={20} /></Button>
                         </View>
                     </View>
                 </View>

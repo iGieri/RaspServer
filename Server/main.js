@@ -20,7 +20,7 @@ io.on("connection", socket => {
 		if (msg == "Gabbot") {
 			gabbotService = fs.readFileSync("/home/pi/Desktop/Gabbot.txt");
 			execute("ps aux | grep gabbot.js", function (stdout) {
-				if (stdout.includes("node gabbot.js")) gabbotStatus = "ON";
+				if (stdout.includes("node /home/pi/Documents/Gabbot/gabbot.js")) gabbotStatus = "ON";
 				else gabbotStatus = "OFF";
 			});
 			socket.emit("get", gabbotStatus + ":" + gabbotService);
@@ -59,6 +59,15 @@ io.on("connection", socket => {
 			});
 		}
 	});
+
+	socket.on("on", msg => {
+		console.log("Launching " + msg);
+		if (msg == "Gabbot") {
+			execute('lxterminal -e "node /home/pi/Documents/Gabbot/gabbot.js > /home/pi/Desktop/Gabbot.txt"', function (stdout) {
+				console.log(stdout);
+			});
+		}
+	})
 });
 
 server.listen(port, () => console.log("Server is running on port " + port));
