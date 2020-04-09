@@ -71,4 +71,49 @@
 
 > **Tips**: you can use nodemon instead of node ; )
 
-> Now we have a basic setup of RaspServer in our phone and in our server. 
+> Now we have a basic setup of RaspServer in our phone and in our server.
+
+### How can I add my Services?
+
+> To add your Services you have to change a lot of code in the App directory and in server directory twice. I'm working hard to make easily this for you.
+
+#### App
+
+> Open ``` App.js ``` and create a Service
+
+> ``` const Website = <Service title="Portfolio" description="Website" image={require("./pathtoimg/logo.png")} />``` 
+
+> Add your new Service in the navigator
+
+``` 
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Loading" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Loading" component={Loading} />
+        <Stack.Screen name="Home" component={Home} />
+        
+        {/* This is the line that you have to add */}
+        <Stack.Screen name="Website" component={Website} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+``` 
+
+> Now we have to create a ServiceButton on the home page. Open ``` Home.js ``` and modify the following code
+
+``` 
+export default function Home({ navigation }) {
+    return(
+        <View>
+            <Nav />
+
+            {/* This is the ServiceButton of our new Service */}
+            <ServiceButton onPress={() => navigation.navigate("Website")} topBorder={true} title="Portfolio" image={require("./pathtoimg/logo.png")}>Website</ServiceButton>
+        </View>
+    );
+} 
+```
+
+> Now we should have configurated with success the Service on our App
