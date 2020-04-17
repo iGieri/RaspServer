@@ -1,89 +1,89 @@
 # RaspServer
-> Everything that you need for your personal server
+ Everything that you need for your personal server
 
 ### What is this?
-> RaspServer is composed by 2 big directories:
+ RaspServer is composed by 2 big directories:
 
 - App
 - Server
   
 #### App
-> The App directory contains a React-Native Application that is compatible with Android and iOS.
+ The App directory contains a React-Native Application that is compatible with Android and iOS.
 
-> This app has a list of Services (programs like website or bots that you run in your server).
+ This app has a list of Services (programs like website or bots that you run in your server).
 
-> When you select a Service, your phone send a socket to your server.
+ When you select a Service, your phone send a socket to your server.
 
-> Server reply with the status of your Service (ON or OFF) and its console (so you can check an error or something like this).
+ Server reply with the status of your Service (ON or OFF) and its console (so you can check an error or something like this).
 
-> Also you can turn on or off the Service you have selected.
+ Also you can turn on or off the Service you have selected.
 
 #### Server
-> The Server directory contains the script that you have to execute on your server.
+ The Server directory contains the script that you have to execute on your server.
 
-> It manages the sockets and the services.
+ It manages the sockets and the services.
 
 ### How can I setup it for my server?
 
-> First of all if you haven't already done, you have to install NodeJS. You can install it [here](https://nodejs.org/ "NodeJS").
+ First of all if you haven't already done, you have to install NodeJS. You can install it [here](https://nodejs.org/ "NodeJS").
 
-> After you have installed it in your pc and in your server, use this command to clone this repository in your PC and in your server
+ After you have installed it in your pc and in your server, use this command to clone this repository in your PC and in your server
 
-> ``` $ git clone https://github.com/PyGera/RaspServer.git ```
+ ``` $ git clone https://github.com/PyGera/RaspServer.git ```
 
 #### App
 
-> If this is the first time that you use React-Native, you should read [this](https://reactnative.dev/docs/environment-setup "React-Native Guide") guide to setup your environment.
+ If this is the first time that you use React-Native, you should read [this](https://reactnative.dev/docs/environment-setup "React-Native Guide") guide to setup your environment.
 
-> After you have setup React-Native on your pc, you have to change directory with this command
+ After you have setup React-Native on your pc, you have to change directory with this command
 
-> ``` $ cd RaspServer/App ```
+ ``` $ cd RaspServer/App ```
 
-> Now you have to install all npm dependencies with this command
+ Now you have to install all npm dependencies with this command
 
-> ``` $ npm install ```
+ ``` $ npm install ```
 
-> Before you install the app on your phone, you should change the default server ip address. To do this, you have to change ``` raspserver:3000 ```, on line 83 of Service.js, with the ip address of your server and its port.
+ Before you install the app on your phone, you should change the default server ip address. To do this, you have to change ``` raspserver:3000 ```, on line 83 of Service.js, with the ip address of your server and its port.
 
-> If you have an **Android phone** you have to activate **Debug** on **Developers Settings**.
+ If you have an **Android phone** you have to activate **Debug** on **Developers Settings**.
 
-> Plug your phone into your PC by using an USB cable and run this command 
+ Plug your phone into your PC by using an USB cable and run this command 
 
-> ``` $ npm run android ```
+ ``` $ npm run android ```
 
-> Now RaspServer is installed in your phone.
+ Now RaspServer is installed in your phone.
 
 #### Server
 
-> The first thing you have to do is change directory with the following command
+ The first thing you have to do is change directory with the following command
 
-> ``` $ cd RaspServer/Server ```
+ ``` $ cd RaspServer/Server ```
 
-> Now you can install the npm dependencies with this command
+ Now you can install the npm dependencies with this command
 
-> ``` $ npm install ```
+ ``` $ npm install ```
 
-> If you want you can change the port of your server, but if you change it, you have to change it also in your phone App
+ If you want you can change the port of your server, but if you change it, you have to change it also in your phone App
 
-> Now you can launch the program with this command
+ Now you can launch the program with this command
 
-> ``` $ node main.js ```
+ ``` $ node main.js ```
 
-> **Tips**: you can use nodemon instead of node ; )
+ **Tips**: you can use nodemon instead of node ; )
 
-> Now we have a basic setup of RaspServer in our phone and in our server.
+ Now we have a basic setup of RaspServer in our phone and in our server.
 
 ### How can I add my Services?
 
-> To add your Services you have to change a lot of code in the App directory and in server directory twice. I'm working hard to make easily this for you.
+ To add your Services you have to change a lot of code in the App directory and in server directory twice. I'm working hard to make easily this for you.
 
 #### App
 
-> Open ``` App.js ``` and create a Service
+ Open ``` App.js ``` and create a Service
 
-> ``` const Website = <Service title="Portfolio" description="Website" image={require("./pathtoimg/logo.png")} />``` 
+ ``` const Website = <Service title="Portfolio" description="Website" image={require("./pathtoimg/logo.png")} />``` 
 
-> Add your new Service in the navigator
+ Add your new Service in the navigator
 
 ``` 
 export default function App() {
@@ -101,7 +101,7 @@ export default function App() {
 }
 ``` 
 
-> Now we have to create a ServiceButton on the home page. Open ``` Home.js ``` and modify the following code
+ Now we have to create a ServiceButton on the home page. Open ``` Home.js ``` and modify the following code
 
 ``` 
 export default function Home({ navigation }) {
@@ -110,10 +110,40 @@ export default function Home({ navigation }) {
             <Nav />
 
             {/* This is the ServiceButton of our new Service */}
-            <ServiceButton onPress={() => navigation.navigate("Website")} topBorder={true} title="Portfolio" image={require("./pathtoimg/logo.png")}>Website</ServiceButton>
+            <ServiceButton onPress={() = navigation.navigate("Website")} topBorder={true} title="Portfolio" image={require("./pathtoimg/logo.png")}>Website</ServiceButton>
         </View>
     );
 } 
 ```
 
-> Now we should have configurated with success the Service on our App
+ Now we should have configurated with success the Service on our App
+
+#### Server
+
+ Now we have to configure the server side of the our process
+
+ For first let's change the current directory
+
+ ``` $ cd RaspServer/Server ```
+
+ Server side manage sockets with 3 kind headers:
+
+- on
+- off
+- get
+
+ The message contains the service and the headers.
+
+ For Example:
+
+ ``` get Service ```
+
+ Sockets with "get" header send the status and the console of a Service
+
+ Sockets with "on" header turn on a Service
+
+ Sockets with "off" header turn off a Service
+
+ Now we have write code to manage our new Service
+
+Let's open ``` main.js ``` file.
